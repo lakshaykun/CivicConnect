@@ -8,7 +8,6 @@ export default function Layout() {
   return <Tabs 
     screenOptions={{
         tabBarShowLabel: false,
-        // header: ({ route }) => <Header title={route.name} />,
         tabBarItemStyle: {
           width: "100%",
           height: "100%",

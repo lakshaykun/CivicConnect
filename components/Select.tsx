@@ -9,14 +9,15 @@ export default function Select({value, setValue, data}: {value: string, setValue
         style={{
           backgroundColor: '#dbeafe',
           borderRadius: 10,
-          padding: 6,
+          paddingVertical: 6,
+          paddingHorizontal: 8
         }}
-        placeholderStyle={{ color: '#000000' }}
-        selectedTextStyle={{ color: '#292524' }}
+        placeholderStyle={{ color: '#000000', fontSize: '0.8rem' }}
+        selectedTextStyle={{ color: '#292524', fontSize: '0.8rem' }}
         data={data}
         labelField="label"
         valueField="value"
-        placeholder="Select Department"
+        placeholder=""
         value={value}
         onChange={(item) => setValue(item.value)}
       />

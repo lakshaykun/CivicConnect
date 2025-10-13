@@ -2,7 +2,7 @@ import { View, Text, FlatList } from 'react-native'
 import React from 'react'
 
 
-const IssueCards = ({data}: {data: any}) => {
+const IssueStats = ({data}: {data: any}) => {
   return (
     <FlatList
         horizontal
@@ -19,4 +19,4 @@ const IssueCards = ({data}: {data: any}) => {
   )
 }
 
-export default IssueCards
+export default IssueStats

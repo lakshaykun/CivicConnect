@@ -23,22 +23,29 @@ CivicConnect/
 │   │   ├── _layout.tsx         # Auth layout wrapper
 │   │   ├── signin.tsx          # Sign in screen
 │   │   └── signup.tsx          # Sign up screen
-│   └── (tabs)/                  # Main tab navigation (grouped)
-│       ├── _layout.tsx         # Tab layout with bottom navigation
-│       ├── dashboard.tsx       # Dashboard screen
-│       ├── newpost.tsx         # Create new issue post screen
-│       ├── boards.tsx          # Community boards screen
-│       └── profile.tsx         # User profile & issue tracking
+│   ├── (tabs)/                  # Main tab navigation (grouped)
+│   │   ├── _layout.tsx         # Tab layout with bottom navigation
+│   │   ├── dashboard.tsx       # Dashboard screen
+│   │   ├── newpost.tsx         # Create new issue post screen
+│   │   ├── boards.tsx          # Community boards screen
+│   │   └── profile.tsx         # User profile & issue tracking
+│   └── issue/                   # Dynamic issue detail routes
+│       ├── _layout.tsx         # Issue layout wrapper
+│       └── [id].tsx            # Individual issue detail screen
 │
 ├── components/                   # Reusable UI components
 │   ├── Header.tsx              # App header component
 │   ├── IssueCard.tsx           # Individual issue card display
-│   ├── IssueCards.tsx          # Horizontal scrolling stats cards
+│   ├── IssueStats.tsx          # Horizontal scrolling stats cards
 │   ├── Select.tsx              # Department dropdown selector
 │   └── TabBarIcon.tsx          # Custom tab bar icons
 │
 ├── constants/                    # App constants and configurations
+│   ├── colorCode.ts            # Status color mappings for UI
 │   └── icons.ts                # Icon asset exports
+│
+├── services/                     # Data services and API utilities
+│   └── data.ts                  # Mock data for issues, departments, and stats
 │
 ├── assets/                       # Static assets (images, fonts, etc.)
 │
@@ -100,6 +107,16 @@ Main application screens accessible via bottom tab navigation.
   - Color-coded status badges
   - Department icons for visual identification
 
+#### Issue Detail Routes (`issue/`)
+
+Dynamic routes for viewing individual issue details.
+
+- **`_layout.tsx`**: Layout wrapper for issue detail screens
+- **`[id].tsx`**: Dynamic route that displays detailed information for a specific issue by ID, including:
+  - Issue title, description, and status
+  - Department and progress updates
+  - Associated images and comments
+
 ## 🧩 Components
 
 ### `Header.tsx`
@@ -130,7 +147,7 @@ Individual issue card component for displaying civic issues.
   - Green: Resolved
 - Icon mapping for departments (car, delete, security, water, park icons)
 
-### `IssueCards.tsx`
+### `IssueStats.tsx`
 
 Horizontal scrolling statistics cards component.
 
@@ -170,6 +187,23 @@ Custom tab bar icon component with icon and label.
 - Icon and text label combination
 - Mapped icons for each tab
 
+## 📊 Services
+
+### `services/data.ts`
+
+Contains mock data and constants used throughout the application:
+
+- **`issueStatsData`**: Default statistics for issue counts (Pending, In Progress, Resolved)
+- **`deptData`**: Department options for filtering issues
+- **`statusData`**: Status options for filtering issues
+- **`issueData`**: Mock issue data with detailed information including:
+  - Issue ID, title, department, and status
+  - Image URLs (placeholder images)
+  - Descriptions and progress comments
+  - Department categorization and status tracking
+
+This file serves as a data layer for the application, providing sample data for development and testing.
+
 ## 🎨 Styling
 
 The project uses **NativeWind**, which brings TailwindCSS utility classes to React Native:
@@ -189,6 +223,11 @@ The project uses **NativeWind**, which brings TailwindCSS utility classes to Rea
 - **`tailwind.config.js`**: TailwindCSS configuration with content paths
 - **`eslint.config.js`**: Linting rules for code quality
 - **`prettier.config.js`**: Code formatting standards
+
+## 📊 Constants
+
+- **`constants/colorCode.ts`**: Color mappings for issue status badges (yellow for pending, blue for in progress, green for resolved)
+- **`constants/icons.ts`**: Icon asset exports and configurations
 
 ## 🚦 Getting Started
 
@@ -236,26 +275,33 @@ npm run web       # Web
 
 ## 🎯 Features
 
-- **Issue Tracking**: Report and monitor civic issues
+- **Issue Tracking**: Report and monitor civic issues with detailed descriptions
 - **Department Categorization**: Organize issues by department (Road Maintenance, Waste Management, etc.)
 - **Status Management**: Track issue status (Pending, In Progress, Resolved)
-- **Visual Statistics**: Quick overview of issue counts
-- **Filtering**: Filter issues by department
+- **Visual Statistics**: Quick overview of issue counts with horizontal scrolling cards
+- **Filtering**: Filter issues by department and status
+- **Mock Data**: Comprehensive sample data for development and testing
 - **Responsive Design**: Mobile-optimized UI with TailwindCSS
 - **Smooth Animations**: Fade transitions and animated interactions
+- **Progress Tracking**: Issue progress comments and updates
 
 ## 📝 Future Enhancements
 
 - Implement authentication (signin/signup)
 - Add dashboard with charts and analytics
-- Create issue posting functionality
+- Create issue posting functionality with photo upload
 - Implement community boards feature
-- Add photo upload for issue reports
-- Real-time notifications
+- Add real-time notifications for issue updates
 - Backend integration with API
 - User roles (citizen, admin, department staff)
 - Geolocation for issue reporting
 - Map view for issue locations
+- Push notifications
+- Issue voting and prioritization
+- Department response system
+- Issue history and timeline
+- Offline functionality
+- Multi-language support
 
 ## 🤝 Contributing
 
