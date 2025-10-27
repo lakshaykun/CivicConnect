@@ -25,7 +25,7 @@ const index = () => {
           useNativeDriver: true,
         }).start(() => {
           // Step 3: Navigate after fade-out
-          route.replace('/dashboard');
+          route.replace('/signup');
         });
       }, 1000);
     });
