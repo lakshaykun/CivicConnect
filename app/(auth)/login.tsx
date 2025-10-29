@@ -12,11 +12,13 @@ import {
   ScrollView,
 } from "react-native";
 import { router } from "expo-router";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { login, userLoading } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -24,17 +26,13 @@ export default function Login() {
       return;
     }
 
-    setLoading(true);
     try {
-      // TODO: Replace with actual login API/Firebase auth
-      console.log("Login data:", { email, password });
+      await login(email, password);
       Alert.alert("Success", "Logged in successfully!");
-      router.replace("/dashboard");
+      router.replace("/user/dashboard");
     } catch (error: any) {
       console.error(error);
       Alert.alert("Error", "Invalid credentials");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -69,11 +67,11 @@ export default function Login() {
           />
 
           <TouchableOpacity
-            style={[styles.button, loading && { opacity: 0.6 }]}
+            style={[styles.button, userLoading && { opacity: 0.6 }]}
             onPress={handleLogin}
-            disabled={loading}
+            disabled={userLoading}
           >
-            {loading ? (
+            {userLoading ? (
               <ActivityIndicator color="#fff" />
             ) : (
               <Text style={styles.buttonText}>Login</Text>

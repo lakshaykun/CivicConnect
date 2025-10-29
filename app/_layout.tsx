@@ -1,10 +1,16 @@
-import '../global.css';
-
 import { Stack } from 'expo-router';
-import '@/global.css';
+import '../global.css';
+import { AuthProvider } from '@/context/AuthContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Layout() {
-  return <Stack
-    screenOptions={{ headerShown: false }}
-  />;
+  return (
+    <AuthProvider>
+      <SafeAreaView className="flex-1">
+        <Stack
+          screenOptions={{ headerShown: false }}
+        />
+      </SafeAreaView>
+    </AuthProvider>
+  );
 }

@@ -1,35 +1,45 @@
-import { View, Text, Image, Dimensions, Animated } from 'react-native';
+import { Text, Image, Dimensions, Animated } from 'react-native';
 import React, { useEffect, useRef } from 'react';
 import { icons } from '@/constants/icons';
 import { useRouter } from 'expo-router';
+import { useAuth } from '@/context/AuthContext';
 
-const index = () => {
+const Index = () => {
   const { width } = Dimensions.get('window');
-  const route = useRouter();
+  const router = useRouter();
+  const { user, userLoading } = useAuth();
 
-  // Create a fade animation value
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Start invisible
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  // Handle splash animation
   useEffect(() => {
-    // Step 1: Fade In
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1000, // 1 sec fade-in
+      duration: 1000,
       useNativeDriver: true,
     }).start(() => {
-      // Step 2: Wait briefly, then Fade Out
       setTimeout(() => {
         Animated.timing(fadeAnim, {
           toValue: 0,
-          duration: 800, // 0.8 sec fade-out
+          duration: 800,
           useNativeDriver: true,
-        }).start(() => {
-          // Step 3: Navigate after fade-out
-          route.replace('/signup');
-        });
+        }).start();
       }, 1000);
     });
-  }, [fadeAnim, route]);
+  }, [fadeAnim]);
+
+  // Handle routing after animation + user check
+  useEffect(() => {
+    if (!userLoading) {
+      const targetRoute = user ? '/user/(tabs)/dashboard' : '/login';
+      const delay = 1800; // small delay for fade out
+      const timer = setTimeout(() => {
+        router.replace(targetRoute);
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+  }, [userLoading, user]);
+
 
   return (
     <Animated.View
@@ -38,7 +48,7 @@ const index = () => {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
-        opacity: fadeAnim, // Controlled by animation
+        opacity: fadeAnim,
       }}
     >
       <Image
@@ -56,4 +66,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

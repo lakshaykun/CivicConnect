@@ -3,10 +3,21 @@ import React from 'react'
 
 
 const IssueStats = ({data}: {data: any}) => {
+  const issueStatsData = [
+    { title: 'Pending', value: 0 },
+    { title: 'In Progress', value: 0 },
+    { title: 'Resolved', value: 0 },
+  ]
+  
+  issueStatsData.forEach(stat => {
+    const matchingIssues = data.filter((issue: any) => issue.status === stat.title)
+    stat.value = matchingIssues.length
+  })
+
   return (
     <FlatList
         horizontal
-        data={data}
+        data={issueStatsData}
         className='justify-center'
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => (

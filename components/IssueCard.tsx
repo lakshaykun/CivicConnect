@@ -2,7 +2,12 @@ import { View, Text, InteractionManager } from 'react-native'
 import React from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import { issueIconMap } from '@/constants/icons'
-import { colorCodeStatus } from '@/constants/colorCode'
+
+const colorCodeStatus: Record<string, string> = {
+    'Pending': 'bg-yellow-100 text-yellow-500',
+    'In Progress': 'bg-blue-100 text-blue-500',
+    'Resolved': 'bg-green-100 text-green-500',
+};
 
 const IssueCard = ({ issue }: { issue: { title: string, department: string, status: string } }) => {
   return (
@@ -16,7 +21,7 @@ const IssueCard = ({ issue }: { issue: { title: string, department: string, stat
         </View>
         <View>
             <Text 
-                className={`text-xs px-3 h-6 items-center justify-center rounded-2xl p-1 ${colorCodeStatus[issue.status]}`}
+                className={`${colorCodeStatus[issue.status]} text-xs px-3 h-6 items-center justify-center rounded-2xl p-1`}
             >
                 {issue.status}
             </Text>

@@ -18,6 +18,7 @@ import { router } from "expo-router";
 interface SignupFormValues {
   name: string;
   email: string;
+  city: string;
   password: string;
   confirmPassword: string;
 }
@@ -25,6 +26,7 @@ interface SignupFormValues {
 const SignupSchema = Yup.object().shape({
   name: Yup.string().min(2, "Too Short!").required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
+  city: Yup.string().min(2, "Too Short!").required("City is required"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
@@ -73,6 +75,7 @@ export default function Signup() {
             initialValues={{
               name: "",
               email: "",
+              city: "",
               password: "",
               confirmPassword: "",
             }}
@@ -116,6 +119,21 @@ export default function Signup() {
                   />
                   {touched.email && errors.email && (
                     <Text style={styles.error}>{errors.email}</Text>
+                  )}
+                </View>
+
+                {/* City Input */}
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="City"
+                    onChangeText={handleChange("city")}
+                    onBlur={handleBlur("city")}
+                    value={values.city}
+                    placeholderTextColor="#888"
+                  />
+                  {touched.city && errors.city && (
+                    <Text style={styles.error}>{errors.city}</Text>
                   )}
                 </View>
 

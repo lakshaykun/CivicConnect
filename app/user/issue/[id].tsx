@@ -1,7 +1,12 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
-import { colorCodeStatus } from '@/constants/colorCode'
+
+const colorCodeStatus: Record<string, string> = {
+    'Pending': 'bg-yellow-100 text-yellow-500',
+    'In Progress': 'bg-blue-100 text-blue-500',
+    'Resolved': 'bg-green-100 text-green-500',
+};
 
 const IssueDetail = () => {
   const { data } = useLocalSearchParams();
@@ -11,7 +16,10 @@ const IssueDetail = () => {
     <View className='h-full w-full p-2'>
       <View className='bg-white p-2 rounded-lg shadow-sm'>
         <Text className='text-xl font-semibold'>{issue?.title}</Text>
-        <Text className='text-sm text-gray-600 mt-1'>Department: {issue?.department}</Text>
+        <View className='flex-row justify-between items-center mr-2'>
+          <Text className='text-sm text-gray-600 mt-1'>Department: {issue?.department}</Text>
+          <Text className='text-sm text-gray-600 mt-1'>Location: {issue?.location}</Text>
+        </View>
         <Image source={{ uri: issue?.image }} className='w-full h-48 mt-2 rounded-lg' />
         <Text className='text-gray-700 mt-2'>{issue?.description}</Text>
       </View>
