@@ -8,6 +8,8 @@ A React Native mobile application built with Expo Router for civic engagement an
 - **Navigation**: Expo Router (File-based routing)
 - **Styling**: NativeWind (TailwindCSS for React Native)
 - **UI Components**: Gluestack UI, React Native Element Dropdown
+- **Forms**: Formik with Yup validation
+- **Authentication**: AsyncStorage for local storage
 - **Icons**: MaterialIcons from @expo/vector-icons
 - **Language**: TypeScript
 - **Animation**: React Native Reanimated, @legendapp/motion
@@ -17,32 +19,40 @@ A React Native mobile application built with Expo Router for civic engagement an
 ```
 CivicConnect/
 ├── app/                          # Application screens and routing
-│   ├── _layout.tsx              # Root layout wrapper
+│   ├── _layout.tsx              # Root layout wrapper with AuthProvider
 │   ├── index.tsx                # Splash screen with logo animation
 │   ├── (auth)/                  # Authentication routes (grouped)
 │   │   ├── _layout.tsx         # Auth layout wrapper
-│   │   ├── signin.tsx          # Sign in screen
-│   │   └── signup.tsx          # Sign up screen
-│   ├── (tabs)/                  # Main tab navigation (grouped)
-│   │   ├── _layout.tsx         # Tab layout with bottom navigation
-│   │   ├── dashboard.tsx       # Dashboard screen
-│   │   ├── newpost.tsx         # Create new issue post screen
-│   │   ├── boards.tsx          # Community boards screen
-│   │   └── profile.tsx         # User profile & issue tracking
-│   └── issue/                   # Dynamic issue detail routes
-│       ├── _layout.tsx         # Issue layout wrapper
-│       └── [id].tsx            # Individual issue detail screen
+│   │   ├── login.tsx           # User login screen
+│   │   └── signup.tsx          # User registration screen
+│   ├── admin/                   # Admin routes (placeholder)
+│   ├── user/                    # User routes (grouped)
+│   │   ├── (tabs)/             # Main tab navigation (grouped)
+│   │   │   ├── _layout.tsx     # Tab layout with bottom navigation
+│   │   │   ├── dashboard.tsx   # Dashboard screen
+│   │   │   ├── newpost.tsx     # Create new issue post screen
+│   │   │   ├── boards.tsx      # Community boards screen
+│   │   │   └── profile.tsx     # User profile & issue tracking
+│   │   └── issue/              # Dynamic issue detail routes
+│   │       ├── _layout.tsx     # Issue layout wrapper
+│   │       └── [id].tsx        # Individual issue detail screen
 │
 ├── components/                   # Reusable UI components
 │   ├── Header.tsx              # App header component
 │   ├── IssueCard.tsx           # Individual issue card display
 │   ├── IssueStats.tsx          # Horizontal scrolling stats cards
+│   ├── ProtectedRoutes.tsx     # Authentication guard component
 │   ├── Select.tsx              # Department dropdown selector
 │   └── TabBarIcon.tsx          # Custom tab bar icons
 │
 ├── constants/                    # App constants and configurations
-│   ├── colorCode.ts            # Status color mappings for UI
-│   └── icons.ts                # Icon asset exports
+│   └── icons.ts                 # Icon asset exports and mappings
+│
+├── context/                      # React context providers
+│   └── AuthContext.tsx          # Authentication context with login/signup/logout
+│
+├── schema/                       # TypeScript type definitions
+│   └── index.ts                 # User and Issue type definitions
 │
 ├── services/                     # Data services and API utilities
 │   └── data.ts                  # Mock data for issues, departments, and stats
@@ -72,7 +82,7 @@ The `app/` directory uses **Expo Router's file-based routing** system. Files and
 
 #### Root Files
 
-- **`_layout.tsx`**: Root layout component that wraps the entire application. Sets up the navigation stack with `headerShown: false` to use custom headers.
+- **`_layout.tsx`**: Root layout component that wraps the entire application with `AuthProvider` for authentication context. Sets up the navigation stack with `headerShown: false` to use custom headers.
 
 - **`index.tsx`**: Landing/splash screen that displays the CivicConnect logo with a fade-in/fade-out animation. After 1.8 seconds, it automatically navigates to the dashboard.
 
@@ -81,14 +91,23 @@ The `app/` directory uses **Expo Router's file-based routing** system. Files and
 Grouped route for authentication-related screens (parentheses make the folder a route group that doesn't affect the URL).
 
 - **`_layout.tsx`**: Layout wrapper for authentication screens
-- **`signin.tsx`**: User sign-in screen (placeholder)
-- **`signup.tsx`**: User registration screen (placeholder)
+- **`login.tsx`**: User login screen with email/password form
+- **`signup.tsx`**: User registration screen with name, email, password form
 
-#### Tab Navigation (`(tabs)/`)
+#### Admin Routes (`admin/`)
+
+Placeholder for future admin functionality.
+
+#### User Routes (`user/`)
+
+Grouped routes for authenticated user screens.
+
+##### Main Tab Navigation (`user/(tabs)/`)
 
 Main application screens accessible via bottom tab navigation.
 
 - **`_layout.tsx`**: Configures the tab navigator with:
+  - Protected route wrapper requiring authentication
   - Custom tab bar styling (rounded, centered)
   - Four tabs: Dashboard, Post, Boards, Profile
   - Custom header component for each screen
@@ -107,7 +126,7 @@ Main application screens accessible via bottom tab navigation.
   - Color-coded status badges
   - Department icons for visual identification
 
-#### Issue Detail Routes (`issue/`)
+##### Issue Detail Routes (`user/issue/`)
 
 Dynamic routes for viewing individual issue details.
 
@@ -159,6 +178,19 @@ Horizontal scrolling statistics cards component.
 - Blue-themed cards with large numeric values
 - Displays statistics like issue counts
 
+### `ProtectedRoutes.tsx`
+
+Authentication guard component that protects routes requiring user login.
+
+**Props:**
+- `children` (ReactNode): The components to render if authenticated
+
+**Features:**
+- Checks authentication status using AuthContext
+- Redirects to login screen if not authenticated
+- Shows loading indicator during authentication check
+- Wraps protected routes like tab navigation
+
 ### `Select.tsx`
 
 Department selection dropdown component.
@@ -193,16 +225,43 @@ Custom tab bar icon component with icon and label.
 
 Contains mock data and constants used throughout the application:
 
-- **`issueStatsData`**: Default statistics for issue counts (Pending, In Progress, Resolved)
-- **`deptData`**: Department options for filtering issues
-- **`statusData`**: Status options for filtering issues
+- **`deptData`**: Department options for filtering issues (Road Maintenance, Waste Management, etc.)
+- **`statusData`**: Status options for filtering issues (Pending, In Progress, Resolved)
 - **`issueData`**: Mock issue data with detailed information including:
-  - Issue ID, title, department, and status
+  - Issue ID, title, department, location, and status
   - Image URLs (placeholder images)
   - Descriptions and progress comments
   - Department categorization and status tracking
 
 This file serves as a data layer for the application, providing sample data for development and testing.
+
+## 🔐 Context
+
+### `context/AuthContext.tsx`
+
+Authentication context provider for managing user authentication state.
+
+**Features:**
+- User state management with AsyncStorage persistence
+- Login, signup, and logout functions
+- Loading states during authentication operations
+- Automatic navigation based on authentication status
+- Custom `useAuth` hook for accessing authentication context
+
+**Usage:**
+Wraps the entire app in `_layout.tsx` to provide authentication context to all components.
+
+## 📋 Schema
+
+### `schema/index.ts`
+
+TypeScript type definitions for the application data models.
+
+**Types:**
+- **`User`**: Defines user object with name, email, and city
+- **`Issue`**: Defines issue object with id, title, department, location, status, image, description, and progressComment
+
+These types ensure type safety across the application components and services.
 
 ## 🎨 Styling
 
@@ -226,8 +285,7 @@ The project uses **NativeWind**, which brings TailwindCSS utility classes to Rea
 
 ## 📊 Constants
 
-- **`constants/colorCode.ts`**: Color mappings for issue status badges (yellow for pending, blue for in progress, green for resolved)
-- **`constants/icons.ts`**: Icon asset exports and configurations
+- **`constants/icons.ts`**: Icon asset exports and department icon mappings for issue cards
 
 ## 🚦 Getting Started
 
@@ -275,6 +333,8 @@ npm run web       # Web
 
 ## 🎯 Features
 
+- **Authentication**: User login and signup with AsyncStorage persistence
+- **Protected Routes**: Route protection for authenticated users only
 - **Issue Tracking**: Report and monitor civic issues with detailed descriptions
 - **Department Categorization**: Organize issues by department (Road Maintenance, Waste Management, etc.)
 - **Status Management**: Track issue status (Pending, In Progress, Resolved)
@@ -287,9 +347,8 @@ npm run web       # Web
 
 ## 📝 Future Enhancements
 
-- Implement authentication (signin/signup)
-- Add dashboard with charts and analytics
-- Create issue posting functionality with photo upload
+- Implement dashboard with charts and analytics
+- Add issue posting functionality with photo upload
 - Implement community boards feature
 - Add real-time notifications for issue updates
 - Backend integration with API
