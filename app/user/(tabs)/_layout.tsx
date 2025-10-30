@@ -41,7 +41,7 @@ export default function Layout() {
           name="newpost" 
           options={{ 
             title: 'Post', 
-            header: () => <Header title="Post" />,
+            header: () => <Header title="New Post" />,
             tabBarIcon: ({focused}) => (
               <TabBarIcon focused={focused} title="Post" />
             )

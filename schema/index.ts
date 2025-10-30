@@ -13,6 +13,7 @@ interface Issue {
   image: string;
   description: string;
   progressComment: string;
+  createdAt: string;
 }
 
 
