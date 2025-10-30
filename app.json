@@ -3,32 +3,35 @@
     "name": "CivicConnect",
     "slug": "CivicConnect",
     "version": "1.0.0",
-
     "scheme": "CivicConnect",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "assets/logo.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router"
+    ],
     "experiments": {
       "typedRoutes": true,
-
       "tsconfigPaths": true
     },
-
     "orientation": "portrait",
     "icon": "assets/logo.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
       "image": "assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -36,6 +39,13 @@
       "adaptiveIcon": {
         "foregroundImage": "assets/logo.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.lakshaylk.CivicConnect"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "92d68c82-8cdf-4571-8680-8cb4591b350d"
       }
     }
   }

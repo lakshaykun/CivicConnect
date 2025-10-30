@@ -19,7 +19,7 @@ export default function Layout() {
               backgroundColor: '#ffffff',
               borderRadius: 50,
               marginHorizontal:20,
-              marginBottom: 20,
+              marginBottom: 7,
               height: 52,
               position: 'absolute',
               overflow: 'hidden',

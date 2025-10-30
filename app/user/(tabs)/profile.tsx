@@ -60,10 +60,10 @@ const Profile = () => {
       </View>
 
       {/* Filters */}
-      <View className='mt-4 flex-row justify-between items-center'>
+      <View className='mt-4 flex-row justify-between items-center gap-20'>
         <Text className='text-xl text-stone-800 font-bold'>All Issues</Text>
-        <View className='flex-row gap-7'>
-          <Select value={department} setValue={setDepartment} data={deptData} width={220} />
+        <View className='flex-row flex-1 items-center justify-between gap-5'>
+          <Select value={department} setValue={setDepartment} data={deptData} width={120} />
           <Select value={status} setValue={setStatus} data={statusData} width={95} />
         </View>
       </View>

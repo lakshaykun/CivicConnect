@@ -14,13 +14,14 @@ export default function Select({
   width?: number;
 }) {
   return (
-    <View className=''>
+    <View className='flex-1'>
       <Dropdown
         style={{
           backgroundColor: '#dbeafe',
           borderRadius: 10,
           paddingVertical: 6,
           paddingHorizontal: 8,
+          width: width,
         }}
         containerStyle={{
           width: width,

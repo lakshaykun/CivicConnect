@@ -18,7 +18,7 @@ const IssueStats = ({data}: {data: any}) => {
     <FlatList
         horizontal
         data={issueStatsData}
-        className='justify-center'
+        contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}
         keyExtractor={(item) => item.title}
         renderItem={({ item }) => (
           <View className='rounded-lg bg-blue-100 justify-center items-center m-2 w-24 h-24'>
